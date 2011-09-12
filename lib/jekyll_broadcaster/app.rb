@@ -37,7 +37,7 @@ module JekyllBroadcaster
     private
 
     def facebook_auth_client
-      @facebook_auth_client ||= FbGraph::Auth.new(ENV['FACEBOOK_APP_ID'], ENV['FACEBOOK_APP_SECRET'])
+      @facebook_auth_client ||= FbGraph::Auth.new(ENV['FACEBOOK_APP_ID'], ENV['FACEBOOK_APP_SECRET']).client
     end
 
     def i_should_continue?
