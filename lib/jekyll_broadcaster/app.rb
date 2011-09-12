@@ -7,14 +7,15 @@ module JekyllBroadcaster
 
     # Present an aboot page
     get '/' do
-      erb :aboot    
-    end    
+      erb :aboot
+    end
 
     # Receive a post-receive hook from Github
     post '/' do
       @message = JSON.parse(params[:payload]).commits.last.message
       return "<h1>I'm not broadcasting, you didn't tell me to</h1>" unless i_should_continue?
-      broadcast!(commit_payload.commits.last.message)
+      return "Received #{@message}"
+      #broadcast!(@message)
     end
 
     private
@@ -34,8 +35,9 @@ module JekyllBroadcaster
         return "Posted #{message}."
       rescue Exception => exp
         return "Woah! #{exp.message}"
-      end 
+      end
     end
 
   end
 end
+
