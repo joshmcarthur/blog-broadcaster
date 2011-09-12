@@ -21,9 +21,10 @@ module JekyllBroadcaster
         config.consumer_key = ENV['TWITTER_CONSUMER_TOKEN']
         config.consumer_secret = ENV['TWITTER_CONSUMER_SECRET']
         config.oauth_token = ENV['TWITTER_ACCESS_TOKEN']
-        config.oauth_secret = ENV['TWITTER_ACCESS_SECRET']
+        config.oauth_token_secret = ENV['TWITTER_ACCESS_SECRET']
       end
       raise "I need a 140 char message and a URL." unless message && url && message.length < 140
+      puts "BROADCASTING: #{message[0..120] + " " + url}"
       Twitter.update(message[0..120] + " " + url)
     end
   end
