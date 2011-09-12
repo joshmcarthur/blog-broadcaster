@@ -1,7 +1,7 @@
 module JekyllBroadcaster
   class App < Sinatra::Base
-    require 'json'
     require File.dirname(__FILE__) + '/twitter_broadcaster'
+    require File.dirname(__FILE__) + '/facebook_broadcaster'
 
     #Setup!
     set :broadcast_matcher, "BROADCAST:"
@@ -16,7 +16,7 @@ module JekyllBroadcaster
 
     # Facebook is stoopid. We need to have a bunch of routes here just to authorize the user
     get '/setup/authorize/fb' do
-      facebook_auth_client.redirect_uri = request.url.gsub(/?(.)*\Z/, '') + "/complete"
+      facebook_auth_client.redirect_uri = request.url.gsub(/\?(.)*\Z/, '') + "/complete"
       redirect facebook_auth_client.authorization_uri(:scope => [:offline_access, :publish_stream])
     end
 
