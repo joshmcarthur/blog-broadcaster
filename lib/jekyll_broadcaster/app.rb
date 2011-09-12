@@ -1,7 +1,6 @@
 module JekyllBroadcaster
   class App < Sinatra::Base
     require 'json'
-    require 'ruby-debug'
     require File.dirname(__FILE__) + '/twitter_broadcaster'
 
     #Setup!
