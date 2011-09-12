@@ -1,5 +1,6 @@
 module JekyllBroadcaster
   class App < Sinatra::Base
+    require 'json'
 
     #Setup!
     set :broadcast_matcher, "BROADCAST:"
