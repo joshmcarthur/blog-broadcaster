@@ -1,6 +1,8 @@
 module JekyllBroadcaster
   class App < Sinatra::Base
     require 'json'
+    require 'ruby-debug'
+    require File.dirname(__FILE__) + '/twitter_broadcaster'
 
     #Setup!
     set :broadcast_matcher, "BROADCAST:"
@@ -13,26 +15,26 @@ module JekyllBroadcaster
 
     # Receive a post-receive hook from Github
     post '/' do
-      @message = JSON.parse(params[:payload]).commits.last.message
+      @message = JSON.parse(params[:payload])["commits"].last["message"]
+      @message.strip! if @message.is_a?(String)
       return "<h1>I'm not broadcasting, you didn't tell me to</h1>" unless i_should_continue?
-      return "Received #{@message}"
-      #broadcast!(@message)
+      broadcast!(@message)
     end
 
     private
 
-    def should_i_continue?
-      if @message && @message =~ /\A#{broadcast_matcher}/
+    def i_should_continue?
+      if @message && @message =~ /\A#{settings.broadcast_matcher}/
         true
       else
         false
       end
     end
 
-    def broadcast!
+    def broadcast!(message)
       begin
-        TwitterBroadcaster.do_it!(message, blog_url)
-        FacebookBroadcaster.do_it!(message, blog_url)
+        JekyllBroadcaster::TwitterBroadcaster.do_it!(message, settings.blog_url)
+        #FacebookBroadcaster.do_it!(message, settings.blog_url)
         return "Posted #{message}."
       rescue Exception => exp
         return "Woah! #{exp.message}"
